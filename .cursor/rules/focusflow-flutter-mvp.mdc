@@ -1,0 +1,140 @@
+---
+description: FocusFlow Flutter Desktop MVP – architecture, Riverpod, Hive, timer, and code quality
+alwaysApply: true
+---
+
+# FocusFlow – Flutter Desktop (MVP)
+
+## 1. Project Context
+
+FocusFlow is a **Flutter Desktop productivity app** built with:
+
+- Flutter (Material 3)
+- Riverpod (state management)
+- Hive (local persistence)
+- Clean Architecture (light version)
+
+Goal: stable MVP first, then advanced desktop features.
+
+---
+
+## 2. General Coding Standards
+
+- Production-quality code only; no shortcuts or temporary hacks
+- Avoid large monolithic files; prefer small, focused classes
+- No placeholder TODO logic unless explicitly requested
+- Code must compile without errors
+- No unused imports or variables
+
+---
+
+## 3. Architecture (Strict)
+
+Clean Architecture (light version).
+
+**Folder responsibilities:**
+
+- **features/*/data/** – Models, Hive adapters, local data sources, repository implementations
+- **features/*/domain/** – Entities, repository interfaces, use cases. **Pure Dart only (NO Flutter imports)**
+- **features/*/presentation/** – Screens, widgets, Riverpod providers/controllers
+
+**Forbidden:**
+
+- Presentation importing from `data/`
+- UI directly accessing Hive
+- Business logic inside widgets
+- Mixing persistence logic into controllers
+
+---
+
+## 4. State Management (Riverpod)
+
+- Use `Notifier` or `AsyncNotifier` when appropriate
+- Keep state immutable
+- Business logic in controllers; widgets stay mostly “dumb”
+- No global mutable state
+- Dispose timers and resources properly
+
+---
+
+## 5. Hive Persistence
+
+- All Hive operations go through a **local datasource**
+- Repository abstracts the datasource
+- UI must **never** access Hive directly
+- Handle errors with try/catch; return safe fallback state on failure
+- Repository methods (conceptual): `addTask()`, `deleteTask()`, `toggleTask()`, `getTasks()`
+
+---
+
+## 6. Timer Logic
+
+Timer must support: start, pause, reset; switch between focus and break modes.
+
+Single source of truth: mode, remaining seconds, running status.
+
+- Prevent multiple active timers
+- Cancel timer properly on dispose
+- No timer logic inside UI widgets
+
+---
+
+## 7. UI (Desktop First)
+
+- Material 3; clean, minimal layout
+- Consistent spacing: 8 / 12 / 16 / 24
+- Avoid heavy animations in MVP
+- Dark mode ready
+- Proper keyboard focus handling
+- No mobile-only layout assumptions
+
+---
+
+## 8. Code Quality
+
+- Prefer `final` and `const`; no `dynamic` unless necessary; strong typing
+- Meaningful names: e.g. `TaskRepository`, `TaskLocalDataSource`, `TimerController`
+- Short documentation comments on public classes
+- Use `debugPrint()` instead of `print()`
+
+---
+
+## 9. Error Handling
+
+- Do not crash for expected failures
+- Handle: missing Hive box, corrupted local data, timer interruptions
+- Return safe default state when needed
+- Show user-friendly feedback (e.g. SnackBar)
+
+---
+
+## 10. Development Workflow
+
+- Implement **one feature at a time**
+- Do not refactor unrelated parts unless requested
+- Ensure app still runs after each change
+- Avoid adding unrequested features
+- Keep code minimal but scalable
+
+---
+
+## 11. Testing (MVP Level)
+
+Minimum: test timer controller logic; test task repository with mocked datasource. Do not add unnecessary widget tests unless requested.
+
+---
+
+## 12. MVP Focus – Do NOT Implement (Phase 2)
+
+- System tray
+- Notifications
+- Autostart
+- Cloud sync
+- Charts
+- Multi-device support
+
+---
+
+## Golden Rule
+
+Keep the code clean, modular, scalable, and easy to extend for Phase 2 desktop features.
