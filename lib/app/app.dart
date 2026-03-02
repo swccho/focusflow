@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/app_theme.dart';
-import '../features/tasks/presentation/screens/tasks_screen.dart';
+import 'screens/dashboard_screen.dart';
 
 /// Root widget for FocusFlow. Uses Material 3 with light and dark themes.
 class FocusFlowApp extends ConsumerWidget {
@@ -16,7 +16,7 @@ class FocusFlowApp extends ConsumerWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
-      home: const TasksScreen(),
+      home: const DashboardScreen(),
     );
   }
 }
