@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../features/tasks/data/models/task_model.dart';
 
 /// Initializes Hive and opens required boxes. Safe to call before runApp.
+/// Opens "tasks" first so the app can work even if "settings" fails.
 /// Does not throw; logs errors and returns false on failure.
 Future<bool> initializeHive() async {
   try {
@@ -17,6 +18,7 @@ Future<bool> initializeHive() async {
       debugPrint('Hive initialization failed: $e');
       debugPrint(stackTrace.toString());
     }
-    return false;
+    // If "tasks" is open (e.g. "settings" failed), consider init OK for tasks
+    return Hive.isBoxOpen('tasks');
   }
 }
