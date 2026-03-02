@@ -11,7 +11,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Focus'), findsOneWidget);
     expect(find.text('Start'), findsOneWidget);
+    expect(find.textContaining('Sessions today'), findsOneWidget);
   });
 }

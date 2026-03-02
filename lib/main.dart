@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'app/app.dart';
 import 'features/tasks/data/models/task_model.dart';
 import 'features/tasks/presentation/providers/task_providers.dart';
+import 'features/timer/presentation/providers/timer_settings_provider.dart';
 import 'services/hive_service.dart';
 
 void main() async {
@@ -12,7 +13,6 @@ void main() async {
 
   await initializeHive();
 
-  // Provide tasks box for Riverpod (use if already open, else try opening it)
   Box<dynamic>? tasksBox;
   if (Hive.isBoxOpen('tasks')) {
     tasksBox = Hive.box('tasks');
@@ -21,13 +21,17 @@ void main() async {
       await Hive.initFlutter();
       registerTaskModelAdapter();
       tasksBox = await Hive.openBox('tasks');
-    } catch (_) {
-      // Leave null; Tasks screen will show error + Retry
-    }
+    } catch (_) {}
+  }
+
+  Box<dynamic>? settingsBox;
+  if (Hive.isBoxOpen('settings')) {
+    settingsBox = Hive.box('settings');
   }
 
   final overrides = <Override>[
     if (tasksBox != null) tasksBoxProvider.overrideWithValue(tasksBox),
+    if (settingsBox != null) settingsBoxProvider.overrideWithValue(settingsBox),
   ];
 
   runApp(

@@ -1,5 +1,31 @@
 # 📘 FocusFlow – MVP Documentation
 
+## MVP complete
+
+The MVP is **complete**. All core features are implemented, data persists locally, and the app runs on Windows desktop.
+
+---
+
+## How to run (Windows)
+
+**Prerequisites:** Flutter SDK (stable), Windows 10/11.
+
+```bash
+# Clone or open the project, then:
+cd focusflow
+flutter pub get
+flutter run -d windows
+```
+
+To build a release executable:
+
+```bash
+flutter build windows
+# Output: build/windows/x64/runner/Release/
+```
+
+---
+
 ## 1. Project Overview
 
 **FocusFlow** is a lightweight desktop productivity application built with Flutter.
@@ -9,7 +35,18 @@ The goal of the MVP is to deliver a stable, minimal, production-ready desktop ap
 
 ---
 
-## 2. MVP Goals
+## 2. Final MVP features
+
+* **Dashboard:** Pomodoro card, today summary (tasks completed + focus sessions), quick add task, task preview (up to 5), link to full Tasks screen, settings button.
+* **Pomodoro timer:** Focus / Break modes, Start / Pause / Reset, countdown (MM:SS), mode chip, auto-switch at 0 and increment sessions-completed counter.
+* **Timer settings:** Dialog to set focus minutes (10–90) and break minutes (1–30), persisted in Hive.
+* **Tasks:** Add, toggle done, delete; full list on Tasks screen; tasks persisted in Hive.
+* **Today summary:** Tasks completed today, focus sessions completed today (no charts).
+* **Persistence:** Tasks and timer settings in Hive; survives app restart.
+
+---
+
+## 3. MVP Goals (original)
 
 The MVP must:
 
@@ -22,7 +59,7 @@ The MVP will NOT include advanced OS integrations (system tray, auto-start, etc.
 
 ---
 
-# 3. Core Features (MVP Scope)
+# 4. Core Features (MVP Scope)
 
 ## 3.1 Task Management
 
@@ -98,7 +135,7 @@ Data must persist after app restart.
 
 ---
 
-# 4. Architecture Plan (MVP)
+# 5. Architecture Plan (MVP)
 
 We will use a **Clean Architecture (Light Version)**.
 
@@ -128,7 +165,7 @@ lib/
 
 ---
 
-# 5. State Management
+# 6. State Management
 
 We will use:
 
@@ -143,7 +180,7 @@ Reasons:
 
 ---
 
-# 6. User Interface Guidelines
+# 7. User Interface Guidelines
 
 ### Design Principles
 
@@ -181,7 +218,7 @@ Tasks Screen:
 
 ---
 
-# 7. Non-Functional Requirements
+# 8. Non-Functional Requirements
 
 * Fast startup (< 2 seconds)
 * No internet required
@@ -192,7 +229,7 @@ Tasks Screen:
 
 ---
 
-# 8. Out of Scope (Phase 2)
+# 9. Out of Scope (Phase 2)
 
 These are NOT included in MVP:
 
@@ -208,7 +245,7 @@ These are NOT included in MVP:
 
 ---
 
-# 9. Success Criteria for MVP Completion
+# 10. Success Criteria for MVP Completion
 
 The MVP is considered complete when:
 
@@ -221,7 +258,7 @@ The MVP is considered complete when:
 
 ---
 
-# 10. Future Roadmap (After MVP)
+# 11. Future Roadmap (After MVP)
 
 Phase 2:
 

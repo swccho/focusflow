@@ -11,10 +11,25 @@ import '../providers/timer_settings_provider.dart';
 class PomodoroController extends AutoDisposeNotifier<PomodoroState> {
   Timer? _timer;
 
+  PomodoroSettings get _currentSettings {
+    final asyncSettings = ref.read(pomodoroSettingsProvider);
+    return asyncSettings.valueOrNull ?? const PomodoroSettings();
+  }
+
   @override
   PomodoroState build() {
     ref.onDispose(_cancelTimer);
-    final settings = ref.read(pomodoroSettingsProvider);
+    ref.listen(pomodoroSettingsProvider, (prev, next) {
+      next.whenData((settings) {
+        if (!state.isRunning) {
+          final duration = state.mode == PomodoroMode.focus
+              ? settings.focusMinutes * 60
+              : settings.breakMinutes * 60;
+          state = state.copyWith(remainingSeconds: duration);
+        }
+      });
+    });
+    final settings = _currentSettings;
     return PomodoroState(
       mode: PomodoroMode.focus,
       remainingSeconds: settings.focusMinutes * 60,
@@ -30,7 +45,7 @@ class PomodoroController extends AutoDisposeNotifier<PomodoroState> {
   }
 
   int _durationSecondsFor(PomodoroMode mode) {
-    final settings = ref.read(pomodoroSettingsProvider);
+    final settings = _currentSettings;
     return mode == PomodoroMode.focus
         ? settings.focusMinutes * 60
         : settings.breakMinutes * 60;
@@ -96,16 +111,13 @@ class PomodoroController extends AutoDisposeNotifier<PomodoroState> {
     );
   }
 
-  void updateSettings(PomodoroSettings settings) {
-    _cancelTimer();
-    final duration = state.mode == PomodoroMode.focus
-        ? settings.focusMinutes * 60
-        : settings.breakMinutes * 60;
-    state = state.copyWith(
-      remainingSeconds: duration,
-      isRunning: false,
-      errorMessage: null,
-    );
-    ref.read(pomodoroSettingsProvider.notifier).state = settings;
+  Future<void> updateSettings(PomodoroSettings settings) async {
+    await ref.read(pomodoroSettingsProvider.notifier).saveSettings(settings);
+    if (!state.isRunning) {
+      final duration = state.mode == PomodoroMode.focus
+          ? settings.focusMinutes * 60
+          : settings.breakMinutes * 60;
+      state = state.copyWith(remainingSeconds: duration, errorMessage: null);
+    }
   }
 }
