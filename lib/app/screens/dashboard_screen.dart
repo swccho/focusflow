@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/tasks/domain/entities/task.dart';
 import '../../features/tasks/presentation/controllers/task_controller.dart';
 import '../../features/tasks/presentation/screens/tasks_screen.dart';
+import '../../features/stats/presentation/widgets/today_summary_card.dart';
 import '../../features/timer/presentation/widgets/pomodoro_card.dart';
 
 /// Dashboard: Pomodoro card, quick add task, task preview, link to full Tasks.
@@ -50,6 +51,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const PomodoroCard(),
+                const SizedBox(height: 24),
+                const TodaySummaryCard(),
                 const SizedBox(height: 32),
                 _QuickAddTaskRow(
                   controller: _taskController,
